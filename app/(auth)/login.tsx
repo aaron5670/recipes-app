@@ -1,7 +1,6 @@
-import { AntDesign } from '@expo/vector-icons';
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { User } from '@supabase/auth-js';
 import { Link, router } from 'expo-router';
-import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,17 +14,17 @@ export const isAuthError = (error: User | AuthError): error is AuthError => {
 const socialLogins = [
   {
     name: 'Google',
-    icon: <AntDesign name="google" size={24} color="black" />,
+    icon: <FontAwesome6 name="google" iconStyle="brand" size={24} />,
     backgroundColor: '#F1F5F9',
   },
   {
     name: 'Apple',
-    icon: <AntDesign name="apple-o" size={24} color="white" />,
+    icon: <FontAwesome6 name="apple" iconStyle="brand" size={24} color="#fff" />,
     backgroundColor: '#1F2937',
   },
   {
     name: 'Facebook',
-    icon: <AntDesign name="facebook-square" size={24} color="white" />,
+    icon: <FontAwesome6 name="facebook" iconStyle="brand" size={24} color="#fff" />,
     backgroundColor: '#2563EB',
   },
 ];
@@ -50,7 +49,14 @@ export default function Login() {
         <View className="mb-6">
           <Text className="mb-2 text-gray-700">Email Address</Text>
           <View className="flex-row items-center rounded-xl bg-gray-100 p-4">
-            <Mail color="#A0AEC0" size={20} className="mr-3" />
+            <FontAwesome6
+              name="envelope"
+              iconStyle="regular"
+              size={20}
+              color="#A0AEC0"
+              className="mr-3"
+            />
+            {/*<Mail color="#A0AEC0" size={20} className="mr-3" />*/}
             <TextInput
               placeholder="Enter your email"
               placeholderTextColor="#A0AEC0"
@@ -67,7 +73,7 @@ export default function Login() {
         <View className="mb-8">
           <Text className="mb-2 text-gray-700">Password</Text>
           <View className="flex-row items-center rounded-xl bg-gray-100 p-4">
-            <Lock color="#A0AEC0" size={20} className="mr-3" />
+            <FontAwesome6 name="lock" iconStyle="solid" size={20} color="#A0AEC0" />
             <TextInput
               placeholder="Enter your password"
               placeholderTextColor="#A0AEC0"
@@ -78,9 +84,9 @@ export default function Login() {
             />
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
               {showPassword ? (
-                <Eye color="#A0AEC0" size={20} />
+                <FontAwesome6 name="eye" iconStyle="regular" size={20} color="#A0AEC0" />
               ) : (
-                <EyeOff color="#A0AEC0" size={20} />
+                <FontAwesome6 name="eye-slash" iconStyle="regular" size={20} color="#A0AEC0" />
               )}
             </TouchableOpacity>
           </View>
@@ -115,7 +121,13 @@ export default function Login() {
           <Text className="mr-3 text-lg font-bold text-white">
             {loading ? 'Loading...' : 'Sign In'}
           </Text>
-          <ArrowRight color="white" size={20} />
+          <FontAwesome6
+            name="arrow-right"
+            iconStyle="solid"
+            size={20}
+            color="#fff"
+            style={{ marginRight: 10 }}
+          />
         </TouchableOpacity>
 
         {/* Social Login */}

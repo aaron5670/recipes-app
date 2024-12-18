@@ -1,5 +1,5 @@
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { router } from 'expo-router';
-import { Search, User, ChevronRight, Flame } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity, Pressable, Modal } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -62,7 +62,14 @@ const RecipesHomeScreen = () => {
           </View>
           <View>
             <Pressable onPress={() => setShowUserMenu(true)}>
-              <User color="#2C3E50" size={24} />
+              {/*<User color="#2C3E50" size={24} />*/}
+              <FontAwesome6
+                name="user"
+                iconStyle="solid"
+                size={24}
+                color="#2C3E50"
+                className="mr-3"
+              />
             </Pressable>
           </View>
         </View>
@@ -93,7 +100,7 @@ const RecipesHomeScreen = () => {
         {/* Rest of the component remains the same */}
         {/* Search Bar */}
         <View className="mb-6 flex-row items-center rounded-xl bg-gray-100 p-3">
-          <Search color="#A0AEC0" size={20} className="mr-3" />
+          <FontAwesome6 name="fire" iconStyle="solid" size={20} color="#A0AEC0" className="mr-3" />
           <Text className="text-gray-500">Search recipes</Text>
         </View>
 
@@ -119,7 +126,14 @@ const RecipesHomeScreen = () => {
             <Text className="text-xl font-bold text-gray-800">Featured Recipes</Text>
             <TouchableOpacity className="flex-row items-center">
               <Text className="mr-2 text-gray-500">See All</Text>
-              <ChevronRight color="#A0AEC0" size={20} />
+              {/*<ChevronRight color="#A0AEC0" size={20} />*/}
+              <FontAwesome6
+                name="chevron-right"
+                iconStyle="solid"
+                size={20}
+                color="#A0AEC0"
+                className="mr-3"
+              />
             </TouchableOpacity>
           </View>
 
@@ -135,7 +149,14 @@ const RecipesHomeScreen = () => {
                 </View>
                 <View className="flex-row items-center justify-between">
                   <View className="flex-row items-center">
-                    <Flame color="#FF6B6B" size={16} />
+                    {/*<Flame color="#FF6B6B" size={16} />*/}
+                    <FontAwesome6
+                      name="fire"
+                      iconStyle="solid"
+                      size={16}
+                      color="#FF6B6B"
+                      className="mr-2"
+                    />
                     <Text className="ml-2 text-gray-600">{recipe.calories} Cal</Text>
                   </View>
                   <Text className="text-gray-600">{recipe.time}</Text>

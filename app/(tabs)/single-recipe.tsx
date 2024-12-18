@@ -1,4 +1,4 @@
-import { ArrowLeft, Heart, Clock, Flame, Users, ChefHat, CheckCircle2 } from 'lucide-react-native';
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import React, { useState } from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -41,13 +41,14 @@ const SingleRecipeScreen = () => {
       {/* Header */}
       <View className="flex-row items-center justify-between px-4 py-3">
         <TouchableOpacity>
-          <ArrowLeft color="#2C3E50" size={24} />
+          <FontAwesome6 name="arrow-left" iconStyle="solid" size={24} color="#2C3E50" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setIsFavorite(!isFavorite)}>
-          <Heart
-            color={isFavorite ? '#FF6B6B' : '#2C3E50'}
+          <FontAwesome6
+            name="heart"
+            iconStyle="solid"
             size={24}
-            fill={isFavorite ? '#FF6B6B' : 'transparent'}
+            color={isFavorite ? '#FF6B6B' : '#2C3E50'}
           />
         </TouchableOpacity>
       </View>
@@ -67,15 +68,15 @@ const SingleRecipeScreen = () => {
         {/* Recipe Stats */}
         <View className="mb-6 flex-row justify-between rounded-xl bg-gray-100 p-4">
           <View className="items-center">
-            <Clock color="#FF6B6B" size={24} />
+            <FontAwesome6 name="clock" iconStyle="solid" size={24} color="#FF6B6B" />
             <Text className="mt-2 text-gray-700">{recipeDetails.cookTime}</Text>
           </View>
           <View className="items-center">
-            <Flame color="#FF6B6B" size={24} />
+            <FontAwesome6 name="fire" iconStyle="solid" size={24} color="#FF6B6B" />
             <Text className="mt-2 text-gray-700">{recipeDetails.calories} Cal</Text>
           </View>
           <View className="items-center">
-            <Users color="#FF6B6B" size={24} />
+            <FontAwesome6 name="users" iconStyle="solid" size={24} color="#FF6B6B" />
             <Text className="mt-2 text-gray-700">{recipeDetails.servings} Servings</Text>
           </View>
         </View>
@@ -90,7 +91,7 @@ const SingleRecipeScreen = () => {
           <Text className="mb-4 text-xl font-bold text-gray-800">Ingredients</Text>
           {recipeDetails.ingredients.map((ingredient, index) => (
             <View key={index} className="mb-3 flex-row items-center rounded-xl bg-gray-100 p-3">
-              <CheckCircle2 color="#48BB78" size={20} className="mr-3" />
+              <FontAwesome6 name="check" iconStyle="solid" size={20} color="#48BB78" />
               <Text className="text-gray-700">{ingredient}</Text>
             </View>
           ))}
@@ -109,7 +110,7 @@ const SingleRecipeScreen = () => {
 
         {/* Additional Info */}
         <View className="mb-6 flex-row items-center rounded-xl bg-gray-100 p-4">
-          <ChefHat color="#FF6B6B" size={24} className="mr-4" />
+          <FontAwesome6 name="utensils" iconStyle="solid" size={24} color="#FF6B6B" />
           <View>
             <Text className="font-bold text-gray-800">Difficulty</Text>
             <Text className="text-gray-600">{recipeDetails.difficulty}</Text>

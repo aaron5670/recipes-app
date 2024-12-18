@@ -10,7 +10,17 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./node_modules/@react-native-vector-icons/fontawesome6/fonts/FontAwesome6_Regular.ttf",
+            "./node_modules/@react-native-vector-icons/fontawesome6/fonts/FontAwesome6_Brands.ttf",
+            "./node_modules/@react-native-vector-icons/fontawesome6/fonts/FontAwesome6_Solid.ttf"
+          ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

@@ -1,6 +1,5 @@
-import { AntDesign } from '@expo/vector-icons';
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { Link, router } from 'expo-router';
-import { Mail, Lock, User as UserIcon, ArrowRight } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,7 +9,6 @@ import { useSession } from '~/components/ctx';
 
 const RegisterScreen = () => {
   const { signUp } = useSession();
-
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,70 +18,20 @@ const RegisterScreen = () => {
   const socialLogins = [
     {
       name: 'Google',
-      icon: <AntDesign name="google" size={24} color="black" />,
+      icon: <FontAwesome6 name="google" iconStyle="brand" size={24} />,
       backgroundColor: '#F1F5F9',
     },
     {
       name: 'Apple',
-      icon: <AntDesign name="apple-o" size={24} color="white" />,
+      icon: <FontAwesome6 name="apple" iconStyle="brand" size={24} color="#fff" />,
       backgroundColor: '#1F2937',
     },
     {
       name: 'Facebook',
-      icon: <AntDesign name="facebook-square" size={24} color="white" />,
+      icon: <FontAwesome6 name="facebook" iconStyle="brand" size={24} color="#fff" />,
       backgroundColor: '#2563EB',
     },
   ];
-
-  // async function signUp() {
-  //   // Validate inputs
-  //   if (!fullName || !email || !password) {
-  //     Alert.alert('Error', 'Please fill in all fields');
-  //     return;
-  //   }
-  //
-  //   if (password !== confirmPassword) {
-  //     Alert.alert('Error', 'Passwords do not match');
-  //     return;
-  //   }
-  //
-  //   // Validate password strength
-  //   if (password.length < 6) {
-  //     Alert.alert('Error', 'Password must be at least 6 characters');
-  //     return;
-  //   }
-  //
-  //   setLoading(true);
-  //
-  //   try {
-  //     // Sign up with Supabase
-  //     const { data, error } = await supabase.auth.signUp({
-  //       email,
-  //       password,
-  //       options: {
-  //         data: {
-  //           full_name: fullName,
-  //         },
-  //       },
-  //     });
-  //
-  //     if (error) {
-  //       Alert.alert('Sign Up Error', error.message);
-  //       setLoading(false);
-  //       return;
-  //     }
-  //
-  //     // Check if user was created successfully
-  //     if (data.user) {
-  //       Alert.alert('Success', 'Account created! Please check your email to verify your account.');
-  //       router.replace('/login');
-  //     }
-  //   } catch (err: any) {
-  //     Alert.alert('Sign Up Error', err.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -98,7 +46,7 @@ const RegisterScreen = () => {
         <View className="mb-6">
           <Text className="mb-2 text-gray-700">Full Name</Text>
           <View className="flex-row items-center rounded-xl bg-gray-100 p-4">
-            <UserIcon color="#A0AEC0" size={20} className="mr-3" />
+            <FontAwesome6 name="user" iconStyle="solid" size={20} color="#A0AEC0" />
             <TextInput
               placeholder="Enter your full name"
               placeholderTextColor="#A0AEC0"
@@ -114,7 +62,7 @@ const RegisterScreen = () => {
         <View className="mb-6">
           <Text className="mb-2 text-gray-700">Email Address</Text>
           <View className="flex-row items-center rounded-xl bg-gray-100 p-4">
-            <Mail color="#A0AEC0" size={20} className="mr-3" />
+            <FontAwesome6 name="envelope" iconStyle="regular" size={20} color="#A0AEC0" />
             <TextInput
               placeholder="Enter your email"
               placeholderTextColor="#A0AEC0"
@@ -131,7 +79,7 @@ const RegisterScreen = () => {
         <View className="mb-6">
           <Text className="mb-2 text-gray-700">Password</Text>
           <View className="flex-row items-center rounded-xl bg-gray-100 p-4">
-            <Lock color="#A0AEC0" size={20} className="mr-3" />
+            <FontAwesome6 name="lock" iconStyle="solid" size={20} color="#A0AEC0" />
             <TextInput
               placeholder="Create a strong password"
               placeholderTextColor="#A0AEC0"
@@ -147,7 +95,7 @@ const RegisterScreen = () => {
         <View className="mb-8">
           <Text className="mb-2 text-gray-700">Confirm Password</Text>
           <View className="flex-row items-center rounded-xl bg-gray-100 p-4">
-            <Lock color="#A0AEC0" size={20} className="mr-3" />
+            <FontAwesome6 name="lock" iconStyle="solid" size={20} color="#A0AEC0" />
             <TextInput
               placeholder="Confirm your password"
               placeholderTextColor="#A0AEC0"
@@ -189,7 +137,9 @@ const RegisterScreen = () => {
           <Text className="mr-3 text-lg font-bold text-white">
             {loading ? 'Creating Account...' : 'Sign Up'}
           </Text>
-          {!loading && <ArrowRight color="white" size={20} />}
+          {!loading && (
+            <FontAwesome6 name="arrow-right" iconStyle="solid" size={20} color="white" />
+          )}
         </TouchableOpacity>
 
         {/* Social Login */}
