@@ -3,11 +3,10 @@
     "name": "recipes-app",
     "slug": "recipes-app",
     "version": "1.0.0",
-
     "scheme": "recipes-app",
     "web": {
       "bundler": "metro",
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
@@ -17,25 +16,25 @@
         {
           "launchMode": "most-recent"
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,
-
-      "tsconfigPaths": true
+      "tsconfigPaths": true,
+      "reactServerFunctions": true
     },
-
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-
     "userInterfaceStyle": "automatic",
-
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
