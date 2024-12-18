@@ -10,24 +10,8 @@
       }
     },
     {
-      "name": "nativewindui",
-      "type": "styling",
-      "options": {
-        "selectedComponents": [
-          "action-sheet",
-          "activity-view",
-          "avatar",
-          "bottom-sheet",
-          "date-picker",
-          "picker",
-          "progress-indicator",
-          "ratings-indicator",
-          "slider",
-          "text",
-          "toggle",
-          "activity-indicator"
-        ]
-      }
+      "name": "nativewind",
+      "type": "styling"
     },
     {
       "name": "zustand",
@@ -44,16 +28,16 @@
     "overwrite": false,
     "importAlias": true,
     "packageManager": "bun",
-    "eas": true
+    "eas": false
   },
   "packageManager": {
     "type": "bun",
-    "version": "1.1.38"
+    "version": "1.1.40"
   },
   "os": {
     "type": "Darwin",
     "platform": "darwin",
     "arch": "arm64",
-    "kernelVersion": "24.1.0"
+    "kernelVersion": "23.6.0"
   }
 }

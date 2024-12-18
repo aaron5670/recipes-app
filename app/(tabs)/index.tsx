@@ -1,12 +1,12 @@
 import { router } from 'expo-router';
 import { Search, User, ChevronRight, Flame } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, Pressable } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, ScrollView, Image, TouchableOpacity, Pressable, Modal } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { useSession } from '~/app/ctx';
+import { useSession } from '~/components/ctx';
 
-// Sample recipe data
+// Sample recipe data stays the same
 const featuredRecipes = [
   {
     id: '1',
@@ -43,6 +43,13 @@ const categories = [
 const RecipesHomeScreen = () => {
   const { signOut } = useSession();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const insets = useSafeAreaInsets();
+
+  const handleLogout = () => {
+    setShowUserMenu(false);
+    signOut();
+    router.replace('/login');
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -53,26 +60,40 @@ const RecipesHomeScreen = () => {
             <Text className="text-3xl font-bold text-gray-800">Delicious</Text>
             <Text className="text-xl text-gray-500">Recipes</Text>
           </View>
-          <Pressable onPress={() => setShowUserMenu(!showUserMenu)}>
-            <User color="#2C3E50" size={24} />
-            {showUserMenu && (
-              <View className="absolute right-0 top-8 z-40 rounded-md bg-white px-4 py-2 shadow-lg">
-                <TouchableOpacity
-                  className="z-40"
-                  onPress={() => {
-                    signOut();
-                    router.replace('/login');
-                  }}>
-                  <Text className="z-40 my-2 text-gray-700">Logout</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </Pressable>
+          <View>
+            <Pressable onPress={() => setShowUserMenu(true)}>
+              <User color="#2C3E50" size={24} />
+            </Pressable>
+          </View>
         </View>
 
+        <Modal
+          visible={showUserMenu}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setShowUserMenu(false)}>
+          <View className="flex-1 bg-black/10">
+            <Pressable className="flex-1" onPress={() => setShowUserMenu(false)}>
+              <View
+                style={{
+                  position: 'absolute',
+                  right: 24,
+                  top: insets.top + 52, // Account for safe area + header spacing
+                }}>
+                <View className="rounded-lg bg-white shadow-xl">
+                  <TouchableOpacity className="px-6 py-2" onPress={handleLogout}>
+                    <Text className="text-sm font-medium text-gray-700">Logout</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Pressable>
+          </View>
+        </Modal>
+
+        {/* Rest of the component remains the same */}
         {/* Search Bar */}
-        <View className="z-10 mb-6 flex-row items-center rounded-xl bg-gray-100 p-3">
-          <Search color="#A0AEC0" size={20} className="z-10 mr-3" />
+        <View className="mb-6 flex-row items-center rounded-xl bg-gray-100 p-3">
+          <Search color="#A0AEC0" size={20} className="mr-3" />
           <Text className="text-gray-500">Search recipes</Text>
         </View>
 

@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { type AuthError, useSession } from '~/app/ctx';
+import { type AuthError, useSession } from '~/components/ctx';
 
 export const isAuthError = (error: User | AuthError): error is AuthError => {
   return (error as AuthError).error !== undefined;

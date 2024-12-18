@@ -6,7 +6,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { isAuthError } from '~/app/(auth)/login';
-import { useSession } from '~/app/ctx';
+import { useSession } from '~/components/ctx';
 
 const RegisterScreen = () => {
   const { signUp } = useSession();

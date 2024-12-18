@@ -6,27 +6,19 @@
     "scheme": "recipes-app",
     "web": {
       "bundler": "metro",
-      "output": "single",
+      "output": "static",
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router",
-      [
-        "expo-dev-launcher",
-        {
-          "launchMode": "most-recent"
-        }
-      ],
-      "expo-secure-store"
+      "expo-router"
     ],
     "experiments": {
       "typedRoutes": true,
-      "tsconfigPaths": true,
-      "reactServerFunctions": true
+      "tsconfigPaths": true
     },
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -36,13 +28,24 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.aaron5670.recipes.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "package": "com.aaron5670.recipes.app"
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "5508cdc3-05ee-4803-8544-9b50b6cf27c0"
       }
-    }
+    },
+    "owner": "aaron5670"
   }
 }

@@ -16,8 +16,8 @@ const AuthContext = createContext<{
   session?: string | null;
   isLoading: boolean;
 }>({
-  signIn: () => Promise.resolve({ error: 'Not implemented' }),
-  signUp: () => Promise.resolve({ error: 'Not implemented' }),
+  signIn: () => Promise.resolve({ error: 'Context not implemented.' }),
+  signUp: () => Promise.resolve({ error: 'Context not implemented.' }),
   signOut: () => {},
   session: null,
   isLoading: false,

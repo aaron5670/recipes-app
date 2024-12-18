@@ -1,7 +1,7 @@
 import { Redirect, Tabs } from 'expo-router';
 
-import { RecipesHomeLoadingScreen } from '~/app/(tabs)/loading';
-import { useSession } from '~/app/ctx';
+import { useSession } from '~/components/ctx';
+import RecipesHomeLoadingScreen from '~/components/loading';
 
 export default function TabLayout() {
   const { session, isLoading } = useSession();
