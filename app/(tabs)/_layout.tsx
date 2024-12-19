@@ -34,6 +34,14 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="image-picker"
+        options={{
+          title: 'Image picker',
+          headerShown: false,
+          tabBarIcon: () => <FontAwesome6 name="image" iconStyle="solid" size={24} color="gray" />,
+        }}
+      />
+      <Tabs.Screen
         name="single-recipe"
         options={{
           title: 'Single recipe',

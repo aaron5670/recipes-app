@@ -38,7 +38,7 @@ export default function Login() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-1 px-6 pt-12">
+      <View className="flex-1 justify-center px-6 pt-12">
         {/* Header */}
         <View className="mb-12">
           <Text className="mb-2 text-4xl font-bold text-gray-800">Welcome</Text>
@@ -48,7 +48,7 @@ export default function Login() {
         {/* Email Input */}
         <View className="mb-6">
           <Text className="mb-2 text-gray-700">Email Address</Text>
-          <View className="flex-row items-center rounded-xl bg-gray-100 p-4">
+          <View className="flex-row items-center gap-3 rounded-xl bg-gray-100 p-4">
             <FontAwesome6
               name="envelope"
               iconStyle="regular"
@@ -72,7 +72,7 @@ export default function Login() {
         {/* Password Input */}
         <View className="mb-8">
           <Text className="mb-2 text-gray-700">Password</Text>
-          <View className="flex-row items-center rounded-xl bg-gray-100 p-4">
+          <View className="flex-row items-center gap-3 rounded-xl bg-gray-100 p-4">
             <FontAwesome6 name="lock" iconStyle="solid" size={20} color="#A0AEC0" />
             <TextInput
               placeholder="Enter your password"
@@ -138,7 +138,7 @@ export default function Login() {
             <View className="ml-4 h-[1px] flex-1 bg-gray-300" />
           </View>
 
-          <View className="flex-row justify-center space-x-4">
+          <View className="flex-row justify-center gap-6">
             {socialLogins.map((social) => (
               <TouchableOpacity
                 key={social.name}

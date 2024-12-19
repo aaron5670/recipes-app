@@ -7,6 +7,24 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { isAuthError } from '~/app/(auth)/login';
 import { useSession } from '~/components/ctx';
 
+const socialLogins = [
+  {
+    name: 'Google',
+    icon: <FontAwesome6 name="google" iconStyle="brand" size={24} />,
+    backgroundColor: '#F1F5F9',
+  },
+  {
+    name: 'Apple',
+    icon: <FontAwesome6 name="apple" iconStyle="brand" size={24} color="#fff" />,
+    backgroundColor: '#1F2937',
+  },
+  {
+    name: 'Facebook',
+    icon: <FontAwesome6 name="facebook" iconStyle="brand" size={24} color="#fff" />,
+    backgroundColor: '#2563EB',
+  },
+];
+
 const RegisterScreen = () => {
   const { signUp } = useSession();
   const [fullName, setFullName] = useState('');
@@ -15,27 +33,9 @@ const RegisterScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const socialLogins = [
-    {
-      name: 'Google',
-      icon: <FontAwesome6 name="google" iconStyle="brand" size={24} />,
-      backgroundColor: '#F1F5F9',
-    },
-    {
-      name: 'Apple',
-      icon: <FontAwesome6 name="apple" iconStyle="brand" size={24} color="#fff" />,
-      backgroundColor: '#1F2937',
-    },
-    {
-      name: 'Facebook',
-      icon: <FontAwesome6 name="facebook" iconStyle="brand" size={24} color="#fff" />,
-      backgroundColor: '#2563EB',
-    },
-  ];
-
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-1 px-6 pt-12">
+      <View className="flex-1 justify-center px-6 pt-12">
         {/* Header */}
         <View className="mb-12">
           <Text className="mb-2 text-4xl font-bold text-gray-800">Create Account</Text>
@@ -45,7 +45,7 @@ const RegisterScreen = () => {
         {/* Full Name Input */}
         <View className="mb-6">
           <Text className="mb-2 text-gray-700">Full Name</Text>
-          <View className="flex-row items-center rounded-xl bg-gray-100 p-4">
+          <View className="flex-row items-center gap-3 rounded-xl bg-gray-100 p-4">
             <FontAwesome6 name="user" iconStyle="solid" size={20} color="#A0AEC0" />
             <TextInput
               placeholder="Enter your full name"
@@ -61,7 +61,7 @@ const RegisterScreen = () => {
         {/* Email Input */}
         <View className="mb-6">
           <Text className="mb-2 text-gray-700">Email Address</Text>
-          <View className="flex-row items-center rounded-xl bg-gray-100 p-4">
+          <View className="flex-row items-center gap-3 rounded-xl bg-gray-100 p-4">
             <FontAwesome6 name="envelope" iconStyle="regular" size={20} color="#A0AEC0" />
             <TextInput
               placeholder="Enter your email"
@@ -78,7 +78,7 @@ const RegisterScreen = () => {
         {/* Password Input */}
         <View className="mb-6">
           <Text className="mb-2 text-gray-700">Password</Text>
-          <View className="flex-row items-center rounded-xl bg-gray-100 p-4">
+          <View className="flex-row items-center gap-3 rounded-xl bg-gray-100 p-4">
             <FontAwesome6 name="lock" iconStyle="solid" size={20} color="#A0AEC0" />
             <TextInput
               placeholder="Create a strong password"
@@ -94,7 +94,7 @@ const RegisterScreen = () => {
         {/* Confirm Password Input */}
         <View className="mb-8">
           <Text className="mb-2 text-gray-700">Confirm Password</Text>
-          <View className="flex-row items-center rounded-xl bg-gray-100 p-4">
+          <View className="flex-row items-center gap-3 rounded-xl bg-gray-100 p-4">
             <FontAwesome6 name="lock" iconStyle="solid" size={20} color="#A0AEC0" />
             <TextInput
               placeholder="Confirm your password"
@@ -150,7 +150,7 @@ const RegisterScreen = () => {
             <View className="ml-4 h-[1px] flex-1 bg-gray-300" />
           </View>
 
-          <View className="flex-row justify-center space-x-4">
+          <View className="flex-row justify-center gap-6 space-x-4">
             {socialLogins.map((social) => (
               <TouchableOpacity
                 key={social.name}
