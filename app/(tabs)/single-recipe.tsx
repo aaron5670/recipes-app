@@ -90,7 +90,9 @@ const SingleRecipeScreen = () => {
         <View className="mb-6">
           <Text className="mb-4 text-xl font-bold text-gray-800">Ingredients</Text>
           {recipeDetails.ingredients.map((ingredient, index) => (
-            <View key={index} className="mb-3 flex-row items-center rounded-xl bg-gray-100 p-3">
+            <View
+              key={index}
+              className="mb-3 flex-row items-center gap-2 rounded-xl bg-gray-100 p-3">
               <FontAwesome6 name="check" iconStyle="solid" size={20} color="#48BB78" />
               <Text className="text-gray-700">{ingredient}</Text>
             </View>
@@ -109,7 +111,7 @@ const SingleRecipeScreen = () => {
         </View>
 
         {/* Additional Info */}
-        <View className="mb-6 flex-row items-center rounded-xl bg-gray-100 p-4">
+        <View className="mb-6 flex-row items-center gap-3 rounded-xl bg-gray-100 p-4">
           <FontAwesome6 name="utensils" iconStyle="solid" size={24} color="#FF6B6B" />
           <View>
             <Text className="font-bold text-gray-800">Difficulty</Text>

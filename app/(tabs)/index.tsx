@@ -99,8 +99,14 @@ const RecipesHomeScreen = () => {
 
         {/* Rest of the component remains the same */}
         {/* Search Bar */}
-        <View className="mb-6 flex-row items-center rounded-xl bg-gray-100 p-3">
-          <FontAwesome6 name="fire" iconStyle="solid" size={20} color="#A0AEC0" className="mr-3" />
+        <View className="mb-6 flex-row items-center gap-3 rounded-xl bg-gray-100 p-3">
+          <FontAwesome6
+            name="utensils"
+            iconStyle="solid"
+            size={20}
+            color="#A0AEC0"
+            className="mr-3"
+          />
           <Text className="text-gray-500">Search recipes</Text>
         </View>
 

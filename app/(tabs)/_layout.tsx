@@ -1,3 +1,4 @@
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { Redirect, Tabs } from 'expo-router';
 
 import { useSession } from '~/components/ctx';
@@ -29,6 +30,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           headerShown: false,
+          tabBarIcon: () => <FontAwesome6 name="house" iconStyle="solid" size={24} color="gray" />,
         }}
       />
       <Tabs.Screen
@@ -36,6 +38,9 @@ export default function TabLayout() {
         options={{
           title: 'Single recipe',
           headerShown: false,
+          tabBarIcon: () => (
+            <FontAwesome6 name="utensils" iconStyle="solid" size={24} color="gray" />
+          ),
         }}
       />
     </Tabs>
