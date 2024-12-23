@@ -149,7 +149,7 @@ const ImageUploadScreen = () => {
                 className="mr-2"
               />
               <Text className="ml-2 text-lg font-bold text-white">
-                {image ? 'Change Photo' : 'Select Photo'}
+                {image ? 'Verander afbeelding' : 'Selecteer een afbeelding'}
               </Text>
             </View>
           )}
