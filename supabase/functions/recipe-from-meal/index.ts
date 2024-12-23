@@ -45,7 +45,7 @@ Deno.serve(async (request) => {
   );
 
   try {
-    // Upload the image first, passing the userId
+    // Upload the image to Supabase
     const imageUrl = await uploadImage(image, supabase);
 
     if (!imageUrl) {

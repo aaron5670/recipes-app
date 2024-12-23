@@ -12,7 +12,7 @@ Mobile Recipes app using React Native (Expo), Supabase and OpenAI.
 - [x] Recipe details
 - [x] Generate recipe based on uploaded food image
 - [x] Store recipes in Supabase database and storage
-- [ ] Generate recipe based uploaded recipe image
+- [x] Generate recipe based uploaded recipe image
 - [ ] Generate recipe based on text input
 - [ ] Edit generated recipe
 - [ ] Share recipe

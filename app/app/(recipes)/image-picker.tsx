@@ -11,12 +11,16 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Pressable,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { supabase } from '~/utils/supabase';
 
+type UploadType = 'meal' | 'recipe';
+
 const ImageUploadScreen = () => {
+  const [uploadType, setUploadType] = useState<UploadType>('meal');
   const [image, setImage] = useState<ImagePickerAsset | null>();
   const [uploading, setUploading] = useState(false);
   const [preloading, setPreloading] = useState(false);
@@ -50,24 +54,31 @@ const ImageUploadScreen = () => {
 
       if (!result.canceled) {
         setPreloading(true);
-        const { data, error } = await supabase.functions.invoke('food-check', {
-          body: { base64: result.assets[0]?.base64 },
+        const { data, error } = await supabase.functions.invoke('image-check', {
+          body: {
+            base64: result.assets[0]?.base64,
+            type: uploadType,
+          },
         });
 
         if (error) {
-          Alert.alert('Error', 'Failed to detect food');
+          Alert.alert('Error', 'Failed to check image');
           setPreloading(false);
           return;
         }
 
-        if (data?.isFood === false) {
-          Alert.alert('Error', 'No food detected in the image');
+        if (data?.isFoodOrRecipe === false) {
+          Alert.alert('Error', 'Geen voedsel of recept gedetecteerd');
           setPreloading(false);
           return;
         }
 
-        setImage(result.assets[0]);
+        if (data?.type === 'meal' || data?.type === 'recipe') {
+          setUploadType(data.type);
+        }
+
         setFoodName(data.name);
+        setImage(result.assets[0]);
       }
     } catch (error) {
       console.log('Error:', error);
@@ -84,10 +95,11 @@ const ImageUploadScreen = () => {
       Alert.alert('Error', 'Image not found');
     }
 
+    const endpoint = uploadType === 'meal' ? 'recipe-from-meal' : 'recipe-from-image';
     const {
       data: { data },
       error,
-    } = await supabase.functions.invoke('recipes', {
+    } = await supabase.functions.invoke(endpoint, {
       body: { base64: image?.base64 },
     });
 
@@ -102,17 +114,73 @@ const ImageUploadScreen = () => {
     router.replace(`/${data.recipeId}`);
   };
 
+  const SegmentedControl = () => (
+    <View className="mb-0 mt-2 flex-row rounded-xl bg-gray-100 p-1">
+      <Pressable
+        onPress={() => {
+          setUploadType('meal');
+          setImage(null);
+          setFoodName('');
+        }}
+        className={`flex-1 flex-row items-center justify-center rounded-lg py-3 ${
+          uploadType === 'meal' ? 'bg-white shadow' : ''
+        }`}>
+        <FontAwesome6
+          name="utensils"
+          iconStyle="solid"
+          size={16}
+          color={uploadType === 'meal' ? '#FF6B6B' : '#4A5568'}
+          className="mr-2"
+        />
+        <Text
+          className={`ml-2 font-bold ${uploadType === 'meal' ? 'text-gray-800' : 'text-gray-500'}`}>
+          Maaltijd
+        </Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          setUploadType('recipe');
+          setImage(null);
+          setFoodName('');
+        }}
+        className={`flex-1 flex-row items-center justify-center rounded-lg py-3 ${
+          uploadType === 'recipe' ? 'bg-white shadow' : ''
+        }`}>
+        <FontAwesome6
+          name="book"
+          iconStyle="solid"
+          size={16}
+          color={uploadType === 'recipe' ? '#FF6B6B' : '#4A5568'}
+          className="mr-2"
+        />
+        <Text
+          className={`ml-2 font-bold ${
+            uploadType === 'recipe' ? 'text-gray-800' : 'text-gray-500'
+          }`}>
+          Recept
+        </Text>
+      </Pressable>
+    </View>
+  );
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row items-center justify-between px-4 py-3">
         <TouchableOpacity onPress={router.back}>
           <FontAwesome6 name="arrow-left" iconStyle="solid" size={24} color="#2C3E50" />
         </TouchableOpacity>
-        <Text className="text-xl font-bold text-gray-800">Upload een gerecht</Text>
+        <Text className="text-xl font-bold text-gray-800">Genereeer een recept</Text>
         <View style={{ width: 24 }} />
       </View>
 
       <View className="flex-1 px-4">
+        <SegmentedControl />
+        <Text className="mt-4 text-center text-gray-600">
+          {uploadType === 'meal'
+            ? 'Genereer een recept door een afbeelding van je gerecht te uploaden.'
+            : 'Genereer een recept door een afbeelding van je recept te uploaden.'}
+        </Text>
+
         <View className="mb-6 mt-4 h-72 w-full overflow-hidden rounded-2xl bg-gray-100">
           {image ? (
             <Animated.View style={{ opacity: 1, flex: 1 }}>
@@ -120,8 +188,13 @@ const ImageUploadScreen = () => {
             </Animated.View>
           ) : (
             <View className="flex-1 items-center justify-center">
-              <FontAwesome6 name="image" iconStyle="solid" size={48} color="#A0AEC0" />
-              <Text className="mt-4 text-center text-gray-500">
+              <FontAwesome6
+                name={uploadType === 'meal' ? 'burger' : 'book-open'}
+                iconStyle="solid"
+                size={48}
+                color="#A0AEC0"
+              />
+              <Text className="mt-4 px-5 text-center text-gray-500">
                 De gekozen afbeelding zal hier verschijnen
               </Text>
             </View>
@@ -130,7 +203,9 @@ const ImageUploadScreen = () => {
 
         <View className="mb-6">
           <Text className="text-center text-gray-600">
-            Kies een afbeelding van hoge kwaliteit die je gerecht het beste weergeeft.
+            {uploadType === 'meal'
+              ? 'Upload een afbeelding van hoge kwaliteit die je gerecht het beste weergeeft.'
+              : 'Upload een afbeelding van hoge kwailteit die je recept het beste weergeeft.'}
           </Text>
         </View>
 
@@ -178,7 +253,9 @@ const ImageUploadScreen = () => {
             {uploading ? (
               <ActivityIndicator color="white" />
             ) : (
-              <Text className="text-lg font-bold text-white">✨ Genereer recept</Text>
+              <Text className="text-lg font-bold text-white">
+                ✨ {uploadType === 'meal' ? 'Genereer recept' : 'Verwerk recept'}
+              </Text>
             )}
           </TouchableOpacity>
         </View>
