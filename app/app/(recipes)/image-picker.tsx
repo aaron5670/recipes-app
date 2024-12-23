@@ -16,7 +16,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { supabase } from '~/utils/supabase';
-
 type UploadType = 'meal' | 'recipe';
 
 const ImageUploadScreen = () => {
