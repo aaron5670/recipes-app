@@ -97,7 +97,7 @@ const ImageUploadScreen = () => {
         <TouchableOpacity onPress={router.back}>
           <FontAwesome6 name="arrow-left" iconStyle="solid" size={24} color="#2C3E50" />
         </TouchableOpacity>
-        <Text className="text-xl font-bold text-gray-800">Upload Recipe Photo</Text>
+        <Text className="text-xl font-bold text-gray-800">Upload een gerecht</Text>
         <View style={{ width: 24 }} />
       </View>
 
@@ -111,7 +111,7 @@ const ImageUploadScreen = () => {
             <View className="flex-1 items-center justify-center">
               <FontAwesome6 name="image" iconStyle="solid" size={48} color="#A0AEC0" />
               <Text className="mt-4 text-center text-gray-500">
-                Selected image will appear here
+                De gekozen afbeelding zal hier verschijnen
               </Text>
             </View>
           )}
@@ -119,7 +119,7 @@ const ImageUploadScreen = () => {
 
         <View className="mb-6">
           <Text className="text-center text-gray-600">
-            Choose a high-quality image that best represents your recipe
+            Kies een afbeelding van hoge kwaliteit die je gerecht het beste weergeeft.
           </Text>
         </View>
 
@@ -137,7 +137,7 @@ const ImageUploadScreen = () => {
               disabled={uploading}
             />
             <Text className="ml-2 text-lg font-bold text-white">
-              {image ? 'Change Photo' : 'Select Photo'}
+              {image ? 'Wijzig afbeelding' : 'Selecteer afbeelding'}
             </Text>
           </View>
         </TouchableOpacity>
@@ -147,8 +147,8 @@ const ImageUploadScreen = () => {
             <View className="flex-row items-center gap-3 rounded-xl bg-gray-100 p-4">
               <FontAwesome6 name="circle-check" iconStyle="solid" size={24} color="#48BB78" />
               <View>
-                <Text className="font-bold text-gray-800">Image Selected</Text>
-                <Text className="text-gray-600">Ready to proceed with your recipe</Text>
+                <Text className="font-bold text-gray-800">Afbeelding geselecteerd</Text>
+                <Text className="text-gray-600">Klaar om je recept te genereren.</Text>
               </View>
             </View>
           </View>
@@ -164,7 +164,7 @@ const ImageUploadScreen = () => {
             {uploading ? (
               <ActivityIndicator color="white" />
             ) : (
-              <Text className="text-lg font-bold text-white">Genereer recept</Text>
+              <Text className="text-lg font-bold text-white">✨ Genereer recept</Text>
             )}
           </TouchableOpacity>
         </View>

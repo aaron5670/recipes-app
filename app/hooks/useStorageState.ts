@@ -49,7 +49,11 @@ export function useStorageState(key: string): UseStateHook<User> {
       }
     } else {
       SecureStore.getItemAsync(key).then((value) => {
-        if (value) setState(JSON.parse(value));
+        if (value) {
+          setState(JSON.parse(value));
+        } else {
+          setState(null);
+        }
       });
     }
   }, [key]);

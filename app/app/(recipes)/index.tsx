@@ -1,6 +1,6 @@
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { Link, router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
   Pressable,
   Modal,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -34,6 +35,34 @@ const RecipesHomeScreen = () => {
   const insets = useSafeAreaInsets();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [recipes, setRecipes] = useState<Tables<'recipes'>[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const getRecipes = async () => {
+    const { data, error } = await supabase
+      .from('recipes')
+      .select()
+      .order('created_at', { ascending: false });
+
+    if ((error && error.message) || !data) {
+      console.error('Error fetching recipes:', error.message);
+      Alert.alert('Error fetching recipes');
+      return;
+    }
+
+    setRecipes(data);
+  };
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await getRecipes();
+    } catch (error) {
+      console.error('Error refreshing recipes:', error);
+      Alert.alert('Error refreshing recipes');
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
 
   const handleLogout = () => {
     setShowUserMenu(false);
@@ -42,26 +71,22 @@ const RecipesHomeScreen = () => {
   };
 
   useEffect(() => {
-    const getRecipes = async () => {
-      const { data, error } = await supabase
-        .from('recipes')
-        .select()
-        .order('created_at', { ascending: false });
-      if ((error && error.message) || !data) {
-        console.error('Error fetching recipes:', error.message);
-        Alert.alert('Error fetching recipes');
-        return;
-      }
-
-      setRecipes(data);
-    };
-
     getRecipes();
   }, []);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView showsVerticalScrollIndicator={false} className="px-4">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        className="px-4"
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#EF4444" // Red color to match your theme
+            colors={['#EF4444']} // Android
+          />
+        }>
         {/* Header */}
         <View className="mb-6 mt-4 flex-row items-center justify-between">
           <View>
@@ -93,12 +118,12 @@ const RecipesHomeScreen = () => {
               <View
                 style={{
                   position: 'absolute',
-                  right: 24,
-                  top: insets.top + 52, // Account for safe area + header spacing
+                  right: 12,
+                  top: insets.top + 35, // Account for safe area + header spacing
                 }}>
                 <View className="rounded-lg bg-white shadow-xl">
                   <TouchableOpacity className="px-6 py-2" onPress={handleLogout}>
-                    <Text className="text-sm font-medium text-gray-700">Logout</Text>
+                    <Text className="text-sm font-medium text-gray-700">Uitloggen</Text>
                   </TouchableOpacity>
                 </View>
               </View>

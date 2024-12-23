@@ -12,6 +12,11 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.aaron5670.RecipesApp"
     },
+    "androidNavigationBar": {
+      "visible": "leanback",
+      "backgroundColor": "#000000",
+      "barStyle": "light-content"
+    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
