@@ -46,7 +46,7 @@ Deno.serve(async (request) => {
 
   try {
     // Upload the image first, passing the userId
-    const imageUrl = await uploadImage(image, '30330c5d-6323-4f7d-a62d-368c3c2b6be8', supabase);
+    const imageUrl = await uploadImage(image, supabase);
 
     if (!imageUrl) {
       return Response.json({ error: 'Failed to upload image' }, { status: 500 });

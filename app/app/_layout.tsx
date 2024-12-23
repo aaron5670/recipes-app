@@ -14,7 +14,7 @@ export {
 export default function RootLayout() {
   return (
     <>
-      <StatusBar key="root-status-bar-light" style="light" />
+      <StatusBar key="root-status-bar-light" style="dark" />
       <SessionProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <Stack screenOptions={SCREEN_OPTIONS}>

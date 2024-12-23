@@ -40,7 +40,6 @@ const ImageUploadScreen = () => {
     if (!hasPermission) return;
 
     try {
-      setPreloading(true);
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ['images'],
         cameraType: CameraType.front,
@@ -50,6 +49,7 @@ const ImageUploadScreen = () => {
       });
 
       if (!result.canceled) {
+        setPreloading(true);
         const { data, error } = await supabase.functions.invoke('food-check', {
           body: { base64: result.assets[0]?.base64 },
         });
@@ -68,10 +68,11 @@ const ImageUploadScreen = () => {
 
         setImage(result.assets[0]);
         setFoodName(data.name);
-        setPreloading(false);
       }
     } catch (error) {
+      console.log('Error:', error);
       Alert.alert('Error', 'Failed to pick image');
+    } finally {
       setPreloading(false);
       setUploading(false);
     }

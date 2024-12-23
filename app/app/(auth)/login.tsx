@@ -1,5 +1,6 @@
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { User } from '@supabase/auth-js';
+import * as Linking from 'expo-linking';
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
@@ -11,23 +12,8 @@ export const isAuthError = (error: User | AuthError): error is AuthError => {
   return (error as AuthError).error !== undefined;
 };
 
-const socialLogins = [
-  {
-    name: 'Google',
-    icon: <FontAwesome6 name="google" iconStyle="brand" size={24} />,
-    backgroundColor: '#F1F5F9',
-  },
-  {
-    name: 'Apple',
-    icon: <FontAwesome6 name="apple" iconStyle="brand" size={24} color="#fff" />,
-    backgroundColor: '#1F2937',
-  },
-  {
-    name: 'Facebook',
-    icon: <FontAwesome6 name="facebook" iconStyle="brand" size={24} color="#fff" />,
-    backgroundColor: '#2563EB',
-  },
-];
+// Create a new URL for the login page (can be used in other applications)
+Linking.createURL('login');
 
 export default function Login() {
   const { signIn } = useSession();
@@ -41,13 +27,13 @@ export default function Login() {
       <View className="flex-1 justify-center px-6 pt-12">
         {/* Header */}
         <View className="mb-12">
-          <Text className="mb-2 text-4xl font-bold text-gray-800">Welcome</Text>
-          <Text className="text-lg text-gray-500">Sign in to continue</Text>
+          <Text className="mb-2 text-4xl font-bold text-gray-800">Welkom! 👋</Text>
+          <Text className="text-lg text-gray-500">Log in om door te gaan.</Text>
         </View>
 
         {/* Email Input */}
         <View className="mb-6">
-          <Text className="mb-2 text-gray-700">Email Address</Text>
+          <Text className="mb-2 text-gray-700">E-mailadres</Text>
           <View className="flex-row items-center gap-3 rounded-xl bg-gray-100 p-4">
             <FontAwesome6
               name="envelope"
@@ -58,7 +44,8 @@ export default function Login() {
             />
             {/*<Mail color="#A0AEC0" size={20} className="mr-3" />*/}
             <TextInput
-              placeholder="Enter your email"
+              id="email"
+              placeholder="Voer je e-mailadres in"
               placeholderTextColor="#A0AEC0"
               value={email}
               onChangeText={setEmail}
@@ -71,11 +58,12 @@ export default function Login() {
 
         {/* Password Input */}
         <View className="mb-8">
-          <Text className="mb-2 text-gray-700">Password</Text>
+          <Text className="mb-2 text-gray-700">Wachtwoord</Text>
           <View className="flex-row items-center gap-3 rounded-xl bg-gray-100 p-4">
             <FontAwesome6 name="lock" iconStyle="solid" size={20} color="#A0AEC0" />
             <TextInput
-              placeholder="Enter your password"
+              id="password"
+              placeholder="Voer je wachtwoord in"
               placeholderTextColor="#A0AEC0"
               value={password}
               onChangeText={setPassword}
@@ -91,7 +79,7 @@ export default function Login() {
             </TouchableOpacity>
           </View>
           <TouchableOpacity className="mt-2 self-end">
-            <Text className="text-[#FF6B6B]">Forgot Password?</Text>
+            <Text className="text-[#FF6B6B]">Wachtwoord vergeten?</Text>
           </TouchableOpacity>
         </View>
 
@@ -118,7 +106,7 @@ export default function Login() {
           }}
           disabled={loading}>
           <Text className="mr-3 text-lg font-bold text-white">
-            {loading ? 'Loading...' : 'Sign In'}
+            {loading ? 'Inloggen...' : 'Inloggen'}
           </Text>
           <FontAwesome6
             name="arrow-right"
@@ -129,32 +117,12 @@ export default function Login() {
           />
         </TouchableOpacity>
 
-        {/* Social Login */}
-        <View className="mb-8">
-          <View className="mb-4 flex-row items-center justify-center">
-            <View className="mr-4 h-[1px] flex-1 bg-gray-300" />
-            <Text className="text-gray-500">Or continue with</Text>
-            <View className="ml-4 h-[1px] flex-1 bg-gray-300" />
-          </View>
-
-          <View className="flex-row justify-center gap-6">
-            {socialLogins.map((social) => (
-              <TouchableOpacity
-                key={social.name}
-                className="items-center justify-center rounded-xl p-3"
-                style={{ backgroundColor: social.backgroundColor }}>
-                {social.icon}
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-
         {/* Sign Up Prompt */}
         <View className="flex-row justify-center">
-          <Text className="mr-2 text-gray-500">Don't have an account?</Text>
+          <Text className="mr-2 text-gray-500">Nog geen account?</Text>
           <Link href="/register" asChild>
             <TouchableOpacity>
-              <Text className="font-bold text-[#FF6B6B]">Sign Up</Text>
+              <Text className="font-bold text-[#FF6B6B]">Registreer nu</Text>
             </TouchableOpacity>
           </Link>
         </View>

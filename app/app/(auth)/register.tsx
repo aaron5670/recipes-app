@@ -7,24 +7,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { isAuthError } from '~/app/(auth)/login';
 import { useSession } from '~/components/ctx';
 
-const socialLogins = [
-  {
-    name: 'Google',
-    icon: <FontAwesome6 name="google" iconStyle="brand" size={24} />,
-    backgroundColor: '#F1F5F9',
-  },
-  {
-    name: 'Apple',
-    icon: <FontAwesome6 name="apple" iconStyle="brand" size={24} color="#fff" />,
-    backgroundColor: '#1F2937',
-  },
-  {
-    name: 'Facebook',
-    icon: <FontAwesome6 name="facebook" iconStyle="brand" size={24} color="#fff" />,
-    backgroundColor: '#2563EB',
-  },
-];
-
 const RegisterScreen = () => {
   const { signUp } = useSession();
   const [fullName, setFullName] = useState('');
@@ -38,17 +20,17 @@ const RegisterScreen = () => {
       <View className="flex-1 justify-center px-6 pt-12">
         {/* Header */}
         <View className="mb-12">
-          <Text className="mb-2 text-4xl font-bold text-gray-800">Create Account</Text>
-          <Text className="text-lg text-gray-500">Sign up to get started</Text>
+          <Text className="mb-2 text-4xl font-bold text-gray-800">Account aanmaken</Text>
+          <Text className="text-lg text-gray-500">Meld je aan om te beginnen.</Text>
         </View>
 
         {/* Full Name Input */}
         <View className="mb-6">
-          <Text className="mb-2 text-gray-700">Full Name</Text>
+          <Text className="mb-2 text-gray-700">Voornaam</Text>
           <View className="flex-row items-center gap-3 rounded-xl bg-gray-100 p-4">
             <FontAwesome6 name="user" iconStyle="solid" size={20} color="#A0AEC0" />
             <TextInput
-              placeholder="Enter your full name"
+              placeholder="Voer je voornaam in"
               placeholderTextColor="#A0AEC0"
               value={fullName}
               onChangeText={setFullName}
@@ -60,11 +42,11 @@ const RegisterScreen = () => {
 
         {/* Email Input */}
         <View className="mb-6">
-          <Text className="mb-2 text-gray-700">Email Address</Text>
+          <Text className="mb-2 text-gray-700">E-mailadres</Text>
           <View className="flex-row items-center gap-3 rounded-xl bg-gray-100 p-4">
             <FontAwesome6 name="envelope" iconStyle="regular" size={20} color="#A0AEC0" />
             <TextInput
-              placeholder="Enter your email"
+              placeholder="Voer je e-mailadres in"
               placeholderTextColor="#A0AEC0"
               value={email}
               onChangeText={setEmail}
@@ -77,11 +59,11 @@ const RegisterScreen = () => {
 
         {/* Password Input */}
         <View className="mb-6">
-          <Text className="mb-2 text-gray-700">Password</Text>
+          <Text className="mb-2 text-gray-700">Wachtwoord</Text>
           <View className="flex-row items-center gap-3 rounded-xl bg-gray-100 p-4">
             <FontAwesome6 name="lock" iconStyle="solid" size={20} color="#A0AEC0" />
             <TextInput
-              placeholder="Create a strong password"
+              placeholder="Voer je wachtwoord in"
               placeholderTextColor="#A0AEC0"
               value={password}
               onChangeText={setPassword}
@@ -93,11 +75,11 @@ const RegisterScreen = () => {
 
         {/* Confirm Password Input */}
         <View className="mb-8">
-          <Text className="mb-2 text-gray-700">Confirm Password</Text>
+          <Text className="mb-2 text-gray-700">Bevestig wachtwoord</Text>
           <View className="flex-row items-center gap-3 rounded-xl bg-gray-100 p-4">
             <FontAwesome6 name="lock" iconStyle="solid" size={20} color="#A0AEC0" />
             <TextInput
-              placeholder="Confirm your password"
+              placeholder="Bevestig je wachtwoord"
               placeholderTextColor="#A0AEC0"
               value={confirmPassword}
               onChangeText={setConfirmPassword}
@@ -113,8 +95,7 @@ const RegisterScreen = () => {
           onPress={async () => {
             setLoading(true);
             if (password !== confirmPassword) {
-              console.log('Passwords do not match');
-              Alert.alert('Error', 'Passwords do not match');
+              Alert.alert('Error', 'Wachtwoorden komen niet overeen');
               setLoading(false);
               return;
             }
@@ -129,44 +110,33 @@ const RegisterScreen = () => {
             }
 
             if (data) {
-              router.replace('/login');
+              Alert.alert(
+                'Controleer je e-mail!',
+                'Account aangemaakt, controleer je e-mail voor verificatie',
+                [
+                  {
+                    text: 'OK',
+                    onPress: () => router.replace('/login'),
+                  },
+                ]
+              );
             }
           }}
           disabled={loading}>
           <Text className="mr-3 text-lg font-bold text-white">
-            {loading ? 'Creating Account...' : 'Sign Up'}
+            {loading ? 'Registreren...' : 'Registreren'}
           </Text>
           {!loading && (
             <FontAwesome6 name="arrow-right" iconStyle="solid" size={20} color="white" />
           )}
         </TouchableOpacity>
 
-        {/* Social Login */}
-        <View className="mb-8">
-          <View className="mb-4 flex-row items-center justify-center">
-            <View className="mr-4 h-[1px] flex-1 bg-gray-300" />
-            <Text className="text-gray-500">Or continue with</Text>
-            <View className="ml-4 h-[1px] flex-1 bg-gray-300" />
-          </View>
-
-          <View className="flex-row justify-center gap-6 space-x-4">
-            {socialLogins.map((social) => (
-              <TouchableOpacity
-                key={social.name}
-                className="items-center justify-center rounded-xl p-3"
-                style={{ backgroundColor: social.backgroundColor }}>
-                {social.icon}
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-
         {/* Login Prompt */}
         <View className="flex-row justify-center">
-          <Text className="mr-2 text-gray-500">Already have an account?</Text>
+          <Text className="mr-2 text-gray-500">Heb je al een account?</Text>
           <Link href="/login" asChild>
             <TouchableOpacity>
-              <Text className="font-bold text-[#FF6B6B]">Sign In</Text>
+              <Text className="font-bold text-[#FF6B6B]">Inloggen</Text>
             </TouchableOpacity>
           </Link>
         </View>

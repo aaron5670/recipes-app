@@ -11,6 +11,7 @@ import {
   Modal,
   Alert,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -207,14 +208,23 @@ const RecipesHomeScreen = () => {
       {/* Create Recipe Button */}
       <View
         style={{
-          paddingBottom: insets.bottom + 16, // Ensure the button is above the safe area
-          paddingTop: 16,
+          paddingBottom: insets.bottom + 8, // Ensure the button is above the safe area
+          paddingTop: 8,
           paddingHorizontal: 16,
         }}
         className="bg-white shadow-md">
         <Link href="/image-picker" asChild>
-          <TouchableOpacity className="w-full rounded-full bg-red-500 py-4">
-            <Text className="text-center text-lg font-bold text-white">Nieuw recept</Text>
+          <TouchableOpacity className="items-center rounded-xl bg-[#FF6B6B] p-4">
+            <View className="flex-row items-center">
+              <FontAwesome6
+                name="camera"
+                iconStyle="solid"
+                size={20}
+                color="white"
+                className="mr-2"
+              />
+              <Text className="ml-2 text-lg font-bold text-white">Nieuw recept</Text>
+            </View>
           </TouchableOpacity>
         </Link>
       </View>

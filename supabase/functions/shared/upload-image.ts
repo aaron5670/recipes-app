@@ -3,13 +3,18 @@ import { decode } from 'npm:base64-arraybuffer';
 
 export async function uploadImage(
   base64Image: string,
-  userId: string,
   supabase: SupabaseClient
 ): Promise<string | null> {
   try {
     // Generate a unique filename with timestamp
     const timestamp = new Date().getTime();
-    const filename = `${userId}/${timestamp}.png`; // Put the file in a folder named after the user ID
+
+    // Get the user ID
+    const user = await supabase.auth.getUser();
+    const userId = user?.data?.user?.id;
+
+    // Put the file in a folder named after the user ID
+    const filename = `${userId}/${timestamp}.png`;
 
     // Upload the image
     const { error } = await supabase.storage
