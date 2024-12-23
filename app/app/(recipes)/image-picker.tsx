@@ -19,6 +19,8 @@ import { supabase } from '~/utils/supabase';
 const ImageUploadScreen = () => {
   const [image, setImage] = useState<ImagePickerAsset | null>();
   const [uploading, setUploading] = useState(false);
+  const [preloading, setPreloading] = useState(false);
+  const [foodName, setFoodName] = useState('');
 
   const requestPermission = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -38,6 +40,7 @@ const ImageUploadScreen = () => {
     if (!hasPermission) return;
 
     try {
+      setPreloading(true);
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ['images'],
         cameraType: CameraType.front,
@@ -47,46 +50,53 @@ const ImageUploadScreen = () => {
       });
 
       if (!result.canceled) {
+        const { data, error } = await supabase.functions.invoke('food-check', {
+          body: { base64: result.assets[0]?.base64 },
+        });
+
+        if (error) {
+          Alert.alert('Error', 'Failed to detect food');
+          setPreloading(false);
+          return;
+        }
+
+        if (data?.isFood === false) {
+          Alert.alert('Error', 'No food detected in the image');
+          setPreloading(false);
+          return;
+        }
+
         setImage(result.assets[0]);
+        setFoodName(data.name);
+        setPreloading(false);
       }
     } catch (error) {
       Alert.alert('Error', 'Failed to pick image');
+      setPreloading(false);
       setUploading(false);
     }
   };
 
   const generateRecipe = async () => {
     setUploading(true);
-    const session = await supabase.auth.getSession();
-    const accessToken = session.data.session?.access_token;
-
-    if (!accessToken) {
-      Alert.alert('Error', 'Access token not found');
-    }
-
     if (!image) {
       Alert.alert('Error', 'Image not found');
     }
 
-    const response = await fetch('https://jbhmlbgmruazfldoipyt.supabase.co/functions/v1/recipes', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({
-        accessToken,
-        base64: image?.base64,
-      }),
+    const {
+      data: { data },
+      error,
+    } = await supabase.functions.invoke('recipes', {
+      body: { base64: image?.base64 },
     });
 
-    if (!response.ok) {
+    if (error) {
+      console.log('Error:', error);
       Alert.alert('Error', 'Failed to generate recipe');
       setUploading(false);
       return;
     }
 
-    const { data } = await response.json();
     setUploading(false);
     router.replace(`/${data.recipeId}`);
   };
@@ -125,29 +135,32 @@ const ImageUploadScreen = () => {
 
         <TouchableOpacity
           onPress={pickImage}
-          disabled={uploading}
+          disabled={preloading || uploading}
           className="items-center rounded-xl bg-[#FF6B6B] p-4">
-          <View className="flex-row items-center">
-            <FontAwesome6
-              name="camera"
-              iconStyle="solid"
-              size={20}
-              color="white"
-              className="mr-2"
-              disabled={uploading}
-            />
-            <Text className="ml-2 text-lg font-bold text-white">
-              {image ? 'Wijzig afbeelding' : 'Selecteer afbeelding'}
-            </Text>
-          </View>
+          {preloading ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <View className="flex-row items-center">
+              <FontAwesome6
+                name="camera"
+                iconStyle="solid"
+                size={20}
+                color="white"
+                className="mr-2"
+              />
+              <Text className="ml-2 text-lg font-bold text-white">
+                {image ? 'Change Photo' : 'Select Photo'}
+              </Text>
+            </View>
+          )}
         </TouchableOpacity>
 
-        {image ? (
+        {image && !preloading ? (
           <View className="mt-6">
             <View className="flex-row items-center gap-3 rounded-xl bg-gray-100 p-4">
               <FontAwesome6 name="circle-check" iconStyle="solid" size={24} color="#48BB78" />
               <View>
-                <Text className="font-bold text-gray-800">Afbeelding geselecteerd</Text>
+                <Text className="font-bold text-gray-800">{foodName}</Text>
                 <Text className="text-gray-600">Klaar om je recept te genereren.</Text>
               </View>
             </View>
@@ -155,7 +168,7 @@ const ImageUploadScreen = () => {
         ) : null}
       </View>
 
-      {image ? (
+      {image && !preloading ? (
         <View className="px-4 pb-4">
           <TouchableOpacity
             className="items-center rounded-xl bg-gray-800 p-4"

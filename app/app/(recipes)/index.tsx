@@ -83,8 +83,8 @@ const RecipesHomeScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            tintColor="#EF4444" // Red color to match your theme
-            colors={['#EF4444']} // Android
+            tintColor="#EF4444"
+            colors={['#EF4444']}
           />
         }>
         {/* Header */}
