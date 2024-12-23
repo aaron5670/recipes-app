@@ -1,6 +1,24 @@
 # 🍔 Recipes app
 
-Mobile Recipes app using React Native (Expo) and Supabase.
+Mobile Recipes app using React Native (Expo), Supabase and OpenAI.
+
+## Features
+
+- [x] User authentication
+  - Sign up
+  - Sign in
+  - Sign out
+- [x] Recipes on the home screen
+- [x] Recipe details
+- [x] Generate recipe based on uploaded food image
+- [x] Store recipes in Supabase database and storage
+- [ ] Generate recipe based uploaded recipe image
+- [ ] Generate recipe based on text input
+- [ ] Edit generated recipe
+- [ ] Share recipe
+- [ ] Like recipe
+- [ ] Comment on recipe
+- [ ] Search for recipes
 
 ## Adding or updating .env variables
 
@@ -17,14 +35,17 @@ build servers.
     - Android: `npx expo run:android`
 
 ## Generate types based on Supabase schema
+
 1. Run `bun generate:types` to generate types based on the Supabase database schema.
 
 ## Run Supabase functions locally
+
 1. Install Deno: `brew install deno`
 2. Run Docker locally
 3. Run `bun supabase:dev` to start the Supabase functions locally
 
 ## Deploy Supabase functions
+
 1. Run `bun supabase:deploy` to deploy the Supabase functions to the Supabase instance
 
 ## Run the app on a physical device (EAS build)
