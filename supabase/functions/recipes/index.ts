@@ -1,11 +1,12 @@
-import { createOpenAI } from '@ai-sdk/openai';
-import { createClient } from '@supabase/supabase-js';
-import { generateObject } from 'ai';
-import { z } from 'zod';
+import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
+import { createOpenAI } from 'npm:@ai-sdk/openai';
+import { createClient } from 'npm:@supabase/supabase-js';
+import { generateObject } from 'npm:ai';
+import { z } from 'npm:zod';
 
-import { Database } from '~/types/database.types';
-import { insertRecipe } from '~/utils/insert-recipe';
-import { uploadImage } from '~/utils/upload-image';
+import type { Database } from '../../../types/database.types.ts';
+import { insertRecipe } from '../shared/insert-recipe.ts';
+import { uploadImage } from '../shared/upload-image.ts';
 
 const openai = createOpenAI({
   compatibility: 'strict', // strict mode, enable when using the OpenAI API
@@ -22,22 +23,18 @@ const schema = z.object({
   instructions: z.array(z.string()),
 });
 
-export async function POST(request: Request) {
+Deno.serve(async (request) => {
   const body = await request.json();
   const image = body.base64;
-  const accessToken = body.accessToken;
-
-  if (!accessToken) {
-    return Response.json({ error: 'Access token not provided' }, { status: 400 });
-  }
+  const accessToken = request.headers.get('Authorization')?.split('Bearer ')[1];
 
   if (!image) {
     return Response.json({ error: 'Image not provided' }, { status: 400 });
   }
 
   const supabase = createClient<Database>(
-    process.env.EXPO_PUBLIC_SUPABASE_URL || '',
-    process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '',
+    Deno.env.get('SUPABASE_URL') || '',
+    Deno.env.get('SUPABASE_ANON_KEY') || '',
     {
       global: {
         headers: {
@@ -86,13 +83,7 @@ export async function POST(request: Request) {
 
     return Response.json({ data });
   } catch (error) {
-    console.error('Error processing request:', error);
-    return Response.json(
-      {
-        error: 'Failed to process request',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    );
+    console.error('Error generating recipe:', error);
+    return Response.json({ error: 'Failed to generate recipe' }, { status: 500 });
   }
-}
+});

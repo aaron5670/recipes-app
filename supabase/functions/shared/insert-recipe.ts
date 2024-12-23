@@ -1,6 +1,6 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from 'npm:@supabase/supabase-js';
 
-import { Tables } from '~/types/database.types';
+import type { Tables } from '../../../types/database.types.ts';
 
 interface RecipeInput {
   name: string;

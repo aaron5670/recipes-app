@@ -28,7 +28,7 @@
       [
         "expo-router",
         {
-          "origin": "http://localhost:8081/"
+          "origin": "https://jbhmlbgmruazfldoipyt.supabase.co/functions/v1/"
         }
       ],
       [

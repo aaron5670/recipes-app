@@ -30,7 +30,7 @@ const categories = [
 ];
 
 const RecipesHomeScreen = () => {
-  const { signOut } = useSession();
+  const { signOut, session } = useSession();
   const insets = useSafeAreaInsets();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [recipes, setRecipes] = useState<Tables<'recipes'>[]>([]);
@@ -43,7 +43,10 @@ const RecipesHomeScreen = () => {
 
   useEffect(() => {
     const getRecipes = async () => {
-      const { data, error } = await supabase.from('recipes').select();
+      const { data, error } = await supabase
+        .from('recipes')
+        .select()
+        .order('created_at', { ascending: false });
       if ((error && error.message) || !data) {
         console.error('Error fetching recipes:', error.message);
         Alert.alert('Error fetching recipes');
@@ -62,8 +65,10 @@ const RecipesHomeScreen = () => {
         {/* Header */}
         <View className="mb-6 mt-4 flex-row items-center justify-between">
           <View>
-            <Text className="text-3xl font-bold text-gray-800">Delicious</Text>
-            <Text className="text-xl text-gray-500">Recipes</Text>
+            <Text className="text-3xl font-bold text-gray-800">
+              Hey {session?.user_metadata.full_name}! 👋
+            </Text>
+            <Text className="text-xl text-gray-500">Recepten</Text>
           </View>
           <View>
             <Pressable onPress={() => setShowUserMenu(true)}>
@@ -110,12 +115,12 @@ const RecipesHomeScreen = () => {
             color="#A0AEC0"
             className="mr-3"
           />
-          <Text className="text-gray-500">Search recipes</Text>
+          <Text className="text-gray-500">Recepten zoeken</Text>
         </View>
 
         {/* Categories */}
         <View className="mb-6">
-          <Text className="mb-4 text-xl font-bold text-gray-800">Categories</Text>
+          <Text className="mb-4 text-xl font-bold text-gray-800">Categorieën</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} className="space-x-7">
             {categories.map((category) => (
               <TouchableOpacity
@@ -132,9 +137,9 @@ const RecipesHomeScreen = () => {
         {/* Featured Recipes */}
         <View className="mb-6">
           <View className="mb-4 flex-row items-center justify-between">
-            <Text className="text-xl font-bold text-gray-800">Featured Recipes</Text>
+            <Text className="text-xl font-bold text-gray-800">Nieuwe recepten</Text>
             <TouchableOpacity className="flex-row items-center">
-              <Text className="mr-2 text-gray-500">See All</Text>
+              <Text className="mr-2 text-gray-500">Bekijk alles</Text>
               <FontAwesome6
                 name="chevron-right"
                 iconStyle="solid"
@@ -178,12 +183,13 @@ const RecipesHomeScreen = () => {
       <View
         style={{
           paddingBottom: insets.bottom + 16, // Ensure the button is above the safe area
+          paddingTop: 16,
           paddingHorizontal: 16,
         }}
         className="bg-white shadow-md">
         <Link href="/image-picker" asChild>
           <TouchableOpacity className="w-full rounded-full bg-red-500 py-4">
-            <Text className="text-center text-lg font-bold text-white">Create Recipe</Text>
+            <Text className="text-center text-lg font-bold text-white">Nieuw recept</Text>
           </TouchableOpacity>
         </Link>
       </View>

@@ -1,5 +1,5 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
-import { decode } from 'base64-arraybuffer';
+import type { SupabaseClient } from 'npm:@supabase/supabase-js';
+import { decode } from 'npm:base64-arraybuffer';
 
 export async function uploadImage(
   base64Image: string,

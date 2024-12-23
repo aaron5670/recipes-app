@@ -1,16 +1,16 @@
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import * as ImagePicker from 'expo-image-picker';
-import { ImagePickerAsset } from 'expo-image-picker';
+import { CameraType, ImagePickerAsset } from 'expo-image-picker';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Alert,
   ActivityIndicator,
+  Alert,
   Animated,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -40,9 +40,10 @@ const ImageUploadScreen = () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ['images'],
+        cameraType: CameraType.front,
         allowsEditing: true,
-        quality: 1,
         base64: true,
+        quality: 1,
       });
 
       if (!result.canceled) {
@@ -67,10 +68,11 @@ const ImageUploadScreen = () => {
       Alert.alert('Error', 'Image not found');
     }
 
-    const response = await fetch('/api/recipe', {
+    const response = await fetch('https://jbhmlbgmruazfldoipyt.supabase.co/functions/v1/recipes', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({
         accessToken,
@@ -80,6 +82,8 @@ const ImageUploadScreen = () => {
 
     if (!response.ok) {
       Alert.alert('Error', 'Failed to generate recipe');
+      setUploading(false);
+      return;
     }
 
     const { data } = await response.json();
@@ -160,7 +164,7 @@ const ImageUploadScreen = () => {
             {uploading ? (
               <ActivityIndicator color="white" />
             ) : (
-              <Text className="text-lg font-bold text-white">Continue</Text>
+              <Text className="text-lg font-bold text-white">Genereer recept</Text>
             )}
           </TouchableOpacity>
         </View>

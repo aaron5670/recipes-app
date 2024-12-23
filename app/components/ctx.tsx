@@ -1,4 +1,4 @@
-import { User } from '@supabase/auth-js';
+import type { User } from '@supabase/auth-js';
 import { useContext, createContext, type PropsWithChildren } from 'react';
 import { Alert } from 'react-native';
 
@@ -13,7 +13,7 @@ const AuthContext = createContext<{
   signIn: (email: string, password: string) => Promise<User | AuthError>;
   signUp: (fullName: string, email: string, password: string) => Promise<User | AuthError>;
   signOut: () => void;
-  session?: string | null;
+  session?: User | null;
   isLoading: boolean;
 }>({
   signIn: () => Promise.resolve({ error: 'Context not implemented.' }),
@@ -63,7 +63,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
             };
           }
 
-          setSession(user.email);
+          setSession(user);
           return user;
         },
         signUp: async (fullName, email, password) => {
@@ -88,7 +88,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
           }
 
           if (user && user.email) {
-            setSession(user.email);
+            setSession(user);
             return user;
           }
 

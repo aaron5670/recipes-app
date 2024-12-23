@@ -5,9 +5,11 @@
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
-      <excludeFolder url="file://$MODULE_DIR$/.expo" />
-      <excludeFolder url="file://$MODULE_DIR$/android" />
-      <excludeFolder url="file://$MODULE_DIR$/ios" />
+      <excludeFolder url="file://$MODULE_DIR$/app/.expo" />
+      <excludeFolder url="file://$MODULE_DIR$/app/android" />
+      <excludeFolder url="file://$MODULE_DIR$/app/ios" />
+      <excludeFolder url="file://$MODULE_DIR$/supabase/.branches" />
+      <excludeFolder url="file://$MODULE_DIR$/supabase/.temp" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

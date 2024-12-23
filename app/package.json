@@ -7,6 +7,8 @@
     "ios": "expo run:ios",
     "start": "expo start",
     "prebuild": "expo prebuild",
+    "supabase:dev": "npx supabase start && npx supabase functions serve",
+    "supabase:deploy": "npx supabase functions deploy --project-ref jbhmlbgmruazfldoipyt",
     "generate:types": "npx supabase gen types typescript --project-id jbhmlbgmruazfldoipyt > types/database.types.ts",
     "build:production": "eas build --profile production --platform android",
     "build:local": "eas build --platform android --local",

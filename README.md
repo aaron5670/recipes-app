@@ -19,6 +19,14 @@ build servers.
 ## Generate types based on Supabase schema
 1. Run `bun generate:types` to generate types based on the Supabase database schema.
 
+## Run Supabase functions locally
+1. Install Deno: `brew install deno`
+2. Run Docker locally
+3. Run `bun supabase:dev` to start the Supabase functions locally
+
+## Deploy Supabase functions
+1. Run `bun supabase:deploy` to deploy the Supabase functions to the Supabase instance
+
 ## Run the app on a physical device (EAS build)
 
 1. Clone the repository
