@@ -7,7 +7,7 @@
     "ios": "expo run:ios",
     "start": "expo start",
     "prebuild": "expo prebuild",
-    "build:development": "eas build --profile development --platform android",
+    "generate:types": "npx supabase gen types typescript --project-id jbhmlbgmruazfldoipyt > types/database.types.ts",
     "build:production": "eas build --profile production --platform android",
     "build:local": "eas build --platform android --local",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" && prettier -c \"**/*.{js,jsx,ts,tsx,json}\"",
@@ -15,12 +15,15 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^1.0.10",
     "@expo/vector-icons": "^14.0.0",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-vector-icons/common": "^11.0.0",
     "@react-native-vector-icons/fontawesome6": "^6.7.1",
     "@react-navigation/native": "^7.0.0",
     "@supabase/supabase-js": "^2.38.4",
+    "ai": "^4.0.21",
+    "base64-arraybuffer": "^1.0.2",
     "expo": "~52.0.20",
     "expo-constants": "~17.0.3",
     "expo-dev-client": "~5.0.6",
@@ -35,6 +38,7 @@
     "expo-web-browser": "~14.0.1",
     "moti": "^0.29.0",
     "nativewind": "^4.1.23",
+    "openai": "^4.77.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-native": "0.76.5",
@@ -43,6 +47,7 @@
     "react-native-safe-area-context": "4.12.0",
     "react-native-screens": "~4.1.0",
     "react-native-web": "~0.19.10",
+    "zod": "^3.24.1",
     "zustand": "^4.5.1"
   },
   "devDependencies": {

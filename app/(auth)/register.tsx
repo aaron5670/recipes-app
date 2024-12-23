@@ -120,7 +120,6 @@ const RegisterScreen = () => {
             }
 
             const data = await signUp(fullName, email, password);
-            console.log('User:', data);
 
             if (isAuthError(data)) {
               console.log('Sign Up Error:', data.error);

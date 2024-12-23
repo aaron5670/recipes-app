@@ -1,5 +1,7 @@
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import * as ImagePicker from 'expo-image-picker';
+import { ImagePickerAsset } from 'expo-image-picker';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
   View,
@@ -12,8 +14,10 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { supabase } from '~/utils/supabase';
+
 const ImageUploadScreen = () => {
-  const [image, setImage] = useState<string | null>();
+  const [image, setImage] = useState<ImagePickerAsset | null>();
   const [uploading, setUploading] = useState(false);
 
   const requestPermission = async () => {
@@ -38,15 +42,11 @@ const ImageUploadScreen = () => {
         mediaTypes: ['images'],
         allowsEditing: true,
         quality: 1,
+        base64: true,
       });
 
       if (!result.canceled) {
-        setUploading(true);
-        // Simulate upload delay
-        setTimeout(() => {
-          setImage(result.assets[0].uri);
-          setUploading(false);
-        }, 1500);
+        setImage(result.assets[0]);
       }
     } catch (error) {
       Alert.alert('Error', 'Failed to pick image');
@@ -54,11 +54,43 @@ const ImageUploadScreen = () => {
     }
   };
 
+  const generateRecipe = async () => {
+    setUploading(true);
+    const session = await supabase.auth.getSession();
+    const accessToken = session.data.session?.access_token;
+
+    if (!accessToken) {
+      Alert.alert('Error', 'Access token not found');
+    }
+
+    if (!image) {
+      Alert.alert('Error', 'Image not found');
+    }
+
+    const response = await fetch('/api/recipe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        accessToken,
+        base64: image?.base64,
+      }),
+    });
+
+    if (!response.ok) {
+      Alert.alert('Error', 'Failed to generate recipe');
+    }
+
+    const { data } = await response.json();
+    setUploading(false);
+    router.replace(`/${data.recipeId}`);
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
-      {/* Header */}
       <View className="flex-row items-center justify-between px-4 py-3">
-        <TouchableOpacity>
+        <TouchableOpacity onPress={router.back}>
           <FontAwesome6 name="arrow-left" iconStyle="solid" size={24} color="#2C3E50" />
         </TouchableOpacity>
         <Text className="text-xl font-bold text-gray-800">Upload Recipe Photo</Text>
@@ -69,7 +101,7 @@ const ImageUploadScreen = () => {
         <View className="mb-6 mt-4 h-72 w-full overflow-hidden rounded-2xl bg-gray-100">
           {image ? (
             <Animated.View style={{ opacity: 1, flex: 1 }}>
-              <Image source={{ uri: image }} className="h-full w-full" />
+              <Image source={{ uri: image.uri }} className="h-full w-full" />
             </Animated.View>
           ) : (
             <View className="flex-1 items-center justify-center">
@@ -91,22 +123,19 @@ const ImageUploadScreen = () => {
           onPress={pickImage}
           disabled={uploading}
           className="items-center rounded-xl bg-[#FF6B6B] p-4">
-          {uploading ? (
-            <ActivityIndicator color="white" />
-          ) : (
-            <View className="flex-row items-center">
-              <FontAwesome6
-                name="camera"
-                iconStyle="solid"
-                size={20}
-                color="white"
-                className="mr-2"
-              />
-              <Text className="ml-2 text-lg font-bold text-white">
-                {image ? 'Change Photo' : 'Select Photo'}
-              </Text>
-            </View>
-          )}
+          <View className="flex-row items-center">
+            <FontAwesome6
+              name="camera"
+              iconStyle="solid"
+              size={20}
+              color="white"
+              className="mr-2"
+              disabled={uploading}
+            />
+            <Text className="ml-2 text-lg font-bold text-white">
+              {image ? 'Change Photo' : 'Select Photo'}
+            </Text>
+          </View>
         </TouchableOpacity>
 
         {image ? (
@@ -124,8 +153,15 @@ const ImageUploadScreen = () => {
 
       {image ? (
         <View className="px-4 pb-4">
-          <TouchableOpacity className="items-center rounded-xl bg-gray-800 p-4">
-            <Text className="text-lg font-bold text-white">Continue</Text>
+          <TouchableOpacity
+            className="items-center rounded-xl bg-gray-800 p-4"
+            onPress={generateRecipe}
+            disabled={uploading}>
+            {uploading ? (
+              <ActivityIndicator color="white" />
+            ) : (
+              <Text className="text-lg font-bold text-white">Continue</Text>
+            )}
           </TouchableOpacity>
         </View>
       ) : null}

@@ -18,8 +18,8 @@ export default function RootLayout() {
       <SessionProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <Stack screenOptions={SCREEN_OPTIONS}>
-            <Stack.Screen name="(tabs)" options={TABS_OPTIONS} />
-            <Stack.Screen name="(auth)" options={AUTH_OPTIONS} />
+            <Stack.Screen name="(auth)" options={DEFAULT_OPTIONS} />
+            <Stack.Screen name="(recipes)" options={DEFAULT_OPTIONS} />
           </Stack>
         </GestureHandlerRootView>
       </SessionProvider>
@@ -29,12 +29,9 @@ export default function RootLayout() {
 
 const SCREEN_OPTIONS = {
   animation: 'ios_from_right', // for android
-} as const;
-
-const TABS_OPTIONS = {
   headerShown: false,
 } as const;
 
-const AUTH_OPTIONS = {
+const DEFAULT_OPTIONS = {
   headerShown: false,
 } as const;

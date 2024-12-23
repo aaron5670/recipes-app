@@ -1,46 +1,66 @@
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import React, { useState } from 'react';
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const SingleRecipeScreen = () => {
-  const [isFavorite, setIsFavorite] = useState(false);
+import { RecipeDetailSkeleton } from '~/components/RecipeDetailSkeleton';
+import { Tables } from '~/types/database.types';
+import { supabase } from '~/utils/supabase';
 
-  const recipeDetails = {
-    name: 'Pizza Margherita',
-    chef: 'Gordon Ramsay',
-    image:
-      'https://images.pexels.com/photos/17907810/pexels-photo-17907810/free-photo-of-pizza-italiaans-eten-maaltijd-vers.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    description:
-      'A classic Italian pasta dish with creamy egg sauce, crispy pancetta, and perfectly cooked pasta.',
-    cookTime: '30 mins',
-    servings: 4,
-    calories: 650,
-    difficulty: 'Intermediate',
-    ingredients: [
-      '400g spaghetti',
-      '200g pancetta',
-      '4 large eggs',
-      '100g Pecorino Romano',
-      '100g Parmesan',
-      'Black pepper',
-      'Salt',
-    ],
-    instructions: [
-      'Bring a large pot of salted water to boil',
-      'Crisp pancetta in a large skillet',
-      'Whisk eggs and cheeses in a separate bowl',
-      'Cook pasta until al dente',
-      'Mix hot pasta with egg mixture, creating a creamy sauce',
-      'Season with black pepper and serve immediately',
-    ],
-  };
+type RecipeWithIngredientsAndInstructions = Tables<'recipes'> & {
+  ingredients: Tables<'ingredients'>[];
+  instructions: Tables<'instructions'>[];
+};
+
+const SingleRecipeScreen = () => {
+  const { id } = useLocalSearchParams();
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [recipe, setRecipe] = useState<RecipeWithIngredientsAndInstructions | null>(null);
+
+  useEffect(() => {
+    const getRecipeDetails = async () => {
+      const recipesQuery = supabase
+        .from('recipes')
+        .select(
+          `
+            name,
+            chef,
+            image_url,
+            description,
+            cook_time,
+            servings,
+            calories,
+            difficulty,
+            created_at,
+            ingredients (
+              name
+            ),
+            instructions (
+              step_number,
+              description
+            )
+          `
+        )
+        .eq('id', id)
+        .single();
+
+      const { data: recipe } = await recipesQuery;
+      setRecipe(recipe as RecipeWithIngredientsAndInstructions);
+    };
+
+    getRecipeDetails();
+  }, []);
+
+  if (!recipe) {
+    return <RecipeDetailSkeleton />;
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* Header */}
       <View className="flex-row items-center justify-between px-4 py-3">
-        <TouchableOpacity>
+        <TouchableOpacity onPress={router.back}>
           <FontAwesome6 name="arrow-left" iconStyle="solid" size={24} color="#2C3E50" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setIsFavorite(!isFavorite)}>
@@ -56,45 +76,45 @@ const SingleRecipeScreen = () => {
       <ScrollView showsVerticalScrollIndicator={false} className="px-4">
         {/* Recipe Image */}
         <View className="mb-6">
-          <Image source={{ uri: recipeDetails.image }} className="h-64 w-full rounded-2xl" />
+          <Image source={{ uri: recipe.image_url as string }} className="h-64 w-full rounded-2xl" />
         </View>
 
         {/* Recipe Title */}
         <View className="mb-4">
-          <Text className="text-3xl font-bold text-gray-800">{recipeDetails.name}</Text>
-          <Text className="mt-1 text-gray-500">by {recipeDetails.chef}</Text>
+          <Text className="text-3xl font-bold text-gray-800">{recipe.name}</Text>
+          <Text className="mt-1 text-gray-500">by {recipe.chef}</Text>
         </View>
 
         {/* Recipe Stats */}
         <View className="mb-6 flex-row justify-between rounded-xl bg-gray-100 p-4">
           <View className="items-center">
             <FontAwesome6 name="clock" iconStyle="solid" size={24} color="#FF6B6B" />
-            <Text className="mt-2 text-gray-700">{recipeDetails.cookTime}</Text>
+            <Text className="mt-2 text-gray-700">{recipe.cook_time}</Text>
           </View>
           <View className="items-center">
             <FontAwesome6 name="fire" iconStyle="solid" size={24} color="#FF6B6B" />
-            <Text className="mt-2 text-gray-700">{recipeDetails.calories} Cal</Text>
+            <Text className="mt-2 text-gray-700">{recipe.calories} Cal</Text>
           </View>
           <View className="items-center">
             <FontAwesome6 name="users" iconStyle="solid" size={24} color="#FF6B6B" />
-            <Text className="mt-2 text-gray-700">{recipeDetails.servings} Servings</Text>
+            <Text className="mt-2 text-gray-700">{recipe.servings} Servings</Text>
           </View>
         </View>
 
         {/* Description */}
         <View className="mb-6">
-          <Text className="text-lg text-gray-600">{recipeDetails.description}</Text>
+          <Text className="text-lg text-gray-600">{recipe.description}</Text>
         </View>
 
         {/* Ingredients */}
         <View className="mb-6">
           <Text className="mb-4 text-xl font-bold text-gray-800">Ingredients</Text>
-          {recipeDetails.ingredients.map((ingredient, index) => (
+          {recipe.ingredients.map((ingredient, index) => (
             <View
               key={index}
               className="mb-3 flex-row items-center gap-2 rounded-xl bg-gray-100 p-3">
               <FontAwesome6 name="check" iconStyle="solid" size={20} color="#48BB78" />
-              <Text className="text-gray-700">{ingredient}</Text>
+              <Text className="text-gray-700">{ingredient.name}</Text>
             </View>
           ))}
         </View>
@@ -102,10 +122,10 @@ const SingleRecipeScreen = () => {
         {/* Instructions */}
         <View className="mb-6">
           <Text className="mb-4 text-xl font-bold text-gray-800">Instructions</Text>
-          {recipeDetails.instructions.map((step, index) => (
+          {recipe.instructions.map((step, index) => (
             <View key={index} className="mb-4 flex-row items-start">
-              <Text className="mr-4 text-xl font-bold text-gray-400">{index + 1}.</Text>
-              <Text className="flex-1 text-gray-700">{step}</Text>
+              <Text className="mr-4 text-xl font-bold text-gray-400">{step.step_number}.</Text>
+              <Text className="flex-1 text-gray-700">{step.description}</Text>
             </View>
           ))}
         </View>
@@ -115,7 +135,7 @@ const SingleRecipeScreen = () => {
           <FontAwesome6 name="utensils" iconStyle="solid" size={24} color="#FF6B6B" />
           <View>
             <Text className="font-bold text-gray-800">Difficulty</Text>
-            <Text className="text-gray-600">{recipeDetails.difficulty}</Text>
+            <Text className="text-gray-600">{recipe.difficulty}</Text>
           </View>
         </View>
       </ScrollView>

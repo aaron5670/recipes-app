@@ -2,7 +2,7 @@ import { Skeleton } from 'moti/skeleton';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-const RecipesHomeLoadingScreen = () => {
+export const HomeSkeleton = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -87,5 +87,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-export default RecipesHomeLoadingScreen;

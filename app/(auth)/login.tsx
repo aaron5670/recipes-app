@@ -101,7 +101,6 @@ export default function Login() {
           onPress={async () => {
             setLoading(true);
             const data = await signIn(email, password);
-            console.log('User:', data);
 
             if (isAuthError(data)) {
               console.log('Sign Up Error:', data.error);

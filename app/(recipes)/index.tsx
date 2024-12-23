@@ -1,32 +1,21 @@
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { router } from 'expo-router';
-import React, { useState } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, Pressable, Modal } from 'react-native';
+import { Link, router } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Pressable,
+  Modal,
+  Alert,
+} from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useSession } from '~/components/ctx';
-
-// Sample recipe data stays the same
-const featuredRecipes = [
-  {
-    id: '1',
-    name: 'Hamburger Deluxe',
-    chef: 'Gordon Ramsay',
-    image:
-      'https://images.pexels.com/photos/20722031/pexels-photo-20722031/free-photo-of-heet-pittig-warm-knap.jpeg?auto=compress&cs=tinysrgb&w=128&h=128&dpr=1',
-    calories: 650,
-    time: '30 mins',
-  },
-  {
-    id: '2',
-    name: 'Pizza Margherita',
-    chef: 'Ottolenghi',
-    image:
-      'https://images.pexels.com/photos/17907810/pexels-photo-17907810/free-photo-of-pizza-italiaans-eten-maaltijd-vers.jpeg?auto=compress&cs=tinysrgb&w=128&h=128&dpr=1',
-    calories: 450,
-    time: '45 mins',
-  },
-];
+import { Tables } from '~/types/database.types';
+import { supabase } from '~/utils/supabase';
 
 const categories = [
   { id: '1', name: 'Breakfast', icon: '🍳' },
@@ -42,14 +31,30 @@ const categories = [
 
 const RecipesHomeScreen = () => {
   const { signOut } = useSession();
-  const [showUserMenu, setShowUserMenu] = useState(false);
   const insets = useSafeAreaInsets();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [recipes, setRecipes] = useState<Tables<'recipes'>[]>([]);
 
   const handleLogout = () => {
     setShowUserMenu(false);
     signOut();
     router.replace('/login');
   };
+
+  useEffect(() => {
+    const getRecipes = async () => {
+      const { data, error } = await supabase.from('recipes').select();
+      if ((error && error.message) || !data) {
+        console.error('Error fetching recipes:', error.message);
+        Alert.alert('Error fetching recipes');
+        return;
+      }
+
+      setRecipes(data);
+    };
+
+    getRecipes();
+  }, []);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -62,7 +67,6 @@ const RecipesHomeScreen = () => {
           </View>
           <View>
             <Pressable onPress={() => setShowUserMenu(true)}>
-              {/*<User color="#2C3E50" size={24} />*/}
               <FontAwesome6
                 name="user"
                 iconStyle="solid"
@@ -97,7 +101,6 @@ const RecipesHomeScreen = () => {
           </View>
         </Modal>
 
-        {/* Rest of the component remains the same */}
         {/* Search Bar */}
         <View className="mb-6 flex-row items-center gap-3 rounded-xl bg-gray-100 p-3">
           <FontAwesome6
@@ -132,7 +135,6 @@ const RecipesHomeScreen = () => {
             <Text className="text-xl font-bold text-gray-800">Featured Recipes</Text>
             <TouchableOpacity className="flex-row items-center">
               <Text className="mr-2 text-gray-500">See All</Text>
-              {/*<ChevronRight color="#A0AEC0" size={20} />*/}
               <FontAwesome6
                 name="chevron-right"
                 iconStyle="solid"
@@ -143,35 +145,48 @@ const RecipesHomeScreen = () => {
             </TouchableOpacity>
           </View>
 
-          {featuredRecipes.map((recipe) => (
-            <TouchableOpacity
-              key={recipe.id}
-              className="mb-4 flex-row overflow-hidden rounded-xl bg-white shadow-md">
-              <Image source={{ uri: recipe.image }} className="h-32 w-32" />
-              <View className="flex-1 justify-between p-4">
-                <View>
-                  <Text className="text-lg font-bold text-gray-800">{recipe.name}</Text>
-                  <Text className="text-gray-500">by {recipe.chef}</Text>
-                </View>
-                <View className="flex-row items-center justify-between">
-                  <View className="flex-row items-center">
-                    {/*<Flame color="#FF6B6B" size={16} />*/}
-                    <FontAwesome6
-                      name="fire"
-                      iconStyle="solid"
-                      size={16}
-                      color="#FF6B6B"
-                      className="mr-2"
-                    />
-                    <Text className="ml-2 text-gray-600">{recipe.calories} Cal</Text>
+          {recipes.map((recipe) => (
+            <Link key={recipe.id} href={`/${recipe.id}`} asChild>
+              <TouchableOpacity className="mb-4 flex-row overflow-hidden rounded-xl bg-white shadow-md">
+                <Image source={{ uri: recipe.image_url as string }} className="h-32 w-32" />
+                <View className="flex-1 justify-between p-4">
+                  <View>
+                    <Text className="text-lg font-bold text-gray-800">{recipe.name}</Text>
+                    <Text className="text-gray-500">by {recipe.chef}</Text>
                   </View>
-                  <Text className="text-gray-600">{recipe.time}</Text>
+                  <View className="flex-row items-center justify-between">
+                    <View className="flex-row items-center">
+                      <FontAwesome6
+                        name="fire"
+                        iconStyle="solid"
+                        size={16}
+                        color="#FF6B6B"
+                        className="mr-2"
+                      />
+                      <Text className="ml-2 text-gray-600">{recipe.calories} Cal</Text>
+                    </View>
+                    <Text className="text-gray-600">{recipe.cook_time}</Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </Link>
           ))}
         </View>
       </ScrollView>
+
+      {/* Create Recipe Button */}
+      <View
+        style={{
+          paddingBottom: insets.bottom + 16, // Ensure the button is above the safe area
+          paddingHorizontal: 16,
+        }}
+        className="bg-white shadow-md">
+        <Link href="/image-picker" asChild>
+          <TouchableOpacity className="w-full rounded-full bg-red-500 py-4">
+            <Text className="text-center text-lg font-bold text-white">Create Recipe</Text>
+          </TouchableOpacity>
+        </Link>
+      </View>
     </SafeAreaView>
   );
 };

@@ -16,7 +16,10 @@ build servers.
     - iOS: `npx expo run:ios`
     - Android: `npx expo run:android`
 
-## Run the app on a physical device
+## Generate types based on Supabase schema
+1. Run `bun generate:types` to generate types based on the Supabase database schema.
+
+## Run the app on a physical device (EAS build)
 
 1. Clone the repository
 2. Install dependencies: `bun install`
